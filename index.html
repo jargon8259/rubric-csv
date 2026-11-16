@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description"
+    content="Turn a four-level rubric table from Word into a Canvas rubric import CSV. Runs in your browser; nothing is uploaded.">
+  <title>Rubric Converter: Rubric Table to Canvas CSV</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script type="module" src="js/app.js"></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <h1>Rubric Converter</h1>
+    <p>Turn a rubric table from Word into a Canvas rubric CSV, or build a rubric from scratch.</p>
+  </header>
+
+  <main id="main">
+    <noscript>
+      <p class="message message-error">This tool needs JavaScript. Please turn it on and reload the page.</p>
+    </noscript>
+
+    <ol class="steps">
+      <!-- Step 1: bring a rubric in -->
+      <li>
+        <section aria-labelledby="step1-title">
+          <h2 id="step1-title"><span class="step-number" aria-hidden="true">1</span>Get your rubric in</h2>
+          <p class="help">Bring in a rubric, or skip this step and type directly into the table in Step 2.</p>
+
+          <div class="import-grid">
+            <div class="import-option">
+              <button type="button" class="button" id="btn-paste-word">Paste from Word</button>
+              <p>Copy the rubric table in Word or Word Online, then paste it here.</p>
+            </div>
+            <div class="import-option">
+              <button type="button" class="button" id="btn-upload-word">Upload Word file</button>
+              <p>Choose a .docx file that contains the rubric table.</p>
+            </div>
+            <div class="import-option">
+              <button type="button" class="button" id="btn-paste-csv">Paste CSV</button>
+              <p>Paste the text of a rubric that is already converted.</p>
+            </div>
+            <div class="import-option">
+              <button type="button" class="button" id="btn-upload-csv">Upload CSV</button>
+              <p>Choose a .csv file from your computer.</p>
+            </div>
+            <div class="import-option import-option-wide">
+              <button type="button" class="button" id="btn-blank">Start a blank rubric</button>
+              <p>Build a new rubric from scratch in the editor below.</p>
+            </div>
+          </div>
+
+          <input type="file" id="file-word" accept=".docx" hidden aria-label="Choose a Word file">
+          <input type="file" id="file-csv" accept=".csv,text/csv" hidden aria-label="Choose a CSV file">
+
+          <div class="panel" id="panel-paste-word" hidden>
+            <p><strong>Paste the Word table in the box below.</strong> It loads as soon as you paste.</p>
+            <div id="word-paste-box" class="paste-box" contenteditable="true" role="textbox" aria-multiline="true"
+              aria-label="Paste the Word table here" data-placeholder="Click here, then press Ctrl+V (Cmd+V on Mac)">
+            </div>
+          </div>
+
+          <div class="panel" id="panel-paste-csv" hidden>
+            <p><label for="csv-paste-box"><strong>Paste the CSV text below,</strong> then select Load.</label></p>
+            <textarea id="csv-paste-box" class="csv-box" rows="6"></textarea>
+            <p><button type="button" class="button button-primary" id="btn-load-csv">Load</button></p>
+          </div>
+
+          <div class="choice" id="import-choice" role="group" aria-labelledby="import-choice-text" hidden>
+            <p id="import-choice-text"></p>
+            <button type="button" class="button button-primary" id="btn-replace">Replace current rubric</button>
+            <button type="button" class="button" id="btn-append">Add to the end</button>
+            <button type="button" class="button" id="btn-cancel-import">Cancel</button>
+          </div>
+
+          <div id="message" class="message" role="status" hidden></div>
+        </section>
+      </li>
+
+      <!-- Step 2: check and edit -->
+      <li>
+        <section aria-labelledby="step2-title">
+          <h2 id="step2-title"><span class="step-number" aria-hidden="true">2</span>Check and adjust</h2>
+
+          <div class="field">
+            <label for="rubric-name">Rubric Name</label>
+            <input type="text" id="rubric-name" placeholder="Type the rubric name" autocomplete="off">
+          </div>
+
+          <div class="table-wrap">
+            <table class="rubric-table">
+              <caption class="visually-hidden">Rubric criteria</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Criterion Name</th>
+                  <th scope="col">Points</th>
+                  <th scope="col">Competent</th>
+                  <th scope="col">Approaching Competency</th>
+                  <th scope="col">Not Competent</th>
+                  <th scope="col">Not Submitted</th>
+                  <th scope="col"><span class="visually-hidden">Actions</span></th>
+                </tr>
+              </thead>
+              <tbody id="criteria-body"></tbody>
+            </table>
+          </div>
+
+          <div class="button-row">
+            <button type="button" class="button" id="btn-add-row">+ Add row</button>
+            <button type="button" class="button" id="btn-clear">Clear all</button>
+          </div>
+
+          <div class="choice" id="clear-confirm" role="group" aria-labelledby="clear-confirm-text" hidden>
+            <p id="clear-confirm-text">Clear the rubric name and every row? This cannot be undone.</p>
+            <button type="button" class="button button-danger" id="btn-clear-yes">Yes, clear everything</button>
+            <button type="button" class="button" id="btn-clear-no">Keep my rubric</button>
+          </div>
+
+          <p class="help">Leave a level blank to skip it. A skipped level is left out of the CSV.
+            Competent earns the full points, Approaching Competency earns half the points rounded up,
+            and Not Competent and Not Submitted each earn 0. Points must be whole numbers.</p>
+
+          <p class="total" id="total"></p>
+          <div id="status" role="status"></div>
+        </section>
+      </li>
+
+      <!-- Step 3: export -->
+      <li>
+        <section aria-labelledby="step3-title">
+          <h2 id="step3-title"><span class="step-number" aria-hidden="true">3</span>Export</h2>
+          <div class="button-row">
+            <button type="button" class="button button-primary" id="btn-download">Download CSV</button>
+            <button type="button" class="button" id="btn-copy">Copy CSV</button>
+            <button type="button" class="button" id="btn-preview" aria-expanded="false"
+              aria-controls="preview-wrap">Preview CSV</button>
+            <span id="copy-note" role="status"></span>
+          </div>
+          <div id="preview-wrap" hidden>
+            <p class="help">Read-only preview of the file that will be downloaded.</p>
+            <pre id="csv-preview" tabindex="0" aria-label="CSV preview"></pre>
+          </div>
+        </section>
+      </li>
+    </ol>
+  </main>
+
+  <footer class="site-footer">
+    <p>Everything runs in your browser. Nothing you enter or load is uploaded or stored on a server.</p>
+  </footer>
+</body>
+
+</html>

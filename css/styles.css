@@ -1,0 +1,530 @@
+/*
+ * styles.css
+ * All styling for the Rubric Converter.
+ * Sections: 1 Variables, 2 Base, 3 Layout, 4 Buttons, 5 Import area,
+ *           6 Editor table, 7 Status and export, 8 Small screens, 9 Print.
+ */
+
+/* 1. Variables: change colors here. Text/background pairs meet WCAG AA contrast. */
+:root {
+  --color-text: #1f2933;
+  --color-muted: #4a5663;
+  --color-bg: #f5f7fa;
+  --color-surface: #ffffff;
+  --color-border: #c4ccd6;
+  --color-accent: #1d4ed8;
+  --color-accent-dark: #1e3a8a;
+  --color-accent-soft: #e8eefc;
+  --color-ok: #14532d;
+  --color-ok-bg: #e3f5e8;
+  --color-warn: #6b4500;
+  --color-warn-bg: #fff4d6;
+  --color-error: #8a1c1c;
+  --color-error-bg: #fde8e8;
+  --radius: 8px;
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-mono: ui-monospace, Consolas, Menlo, monospace;
+}
+
+/* 2. Base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: 1.5;
+}
+
+h1,
+h2 {
+  line-height: 1.25;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  left: 8px;
+  top: -50px;
+  background: var(--color-surface);
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  z-index: 10;
+}
+
+.skip-link:focus {
+  top: 8px;
+}
+
+/* 3. Layout */
+.site-header {
+  background: var(--color-accent-dark);
+  color: #fff;
+  padding: 1.25rem clamp(1rem, 4vw, 2rem);
+}
+
+.site-header h1 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.site-header p {
+  margin: 0.25rem 0 0;
+}
+
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.25rem clamp(1rem, 4vw, 2rem) 3rem;
+}
+
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.steps>li {
+  margin-bottom: 1.25rem;
+}
+
+.steps section {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.25rem;
+}
+
+.steps h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.2rem;
+  color: var(--color-accent-dark);
+}
+
+.step-number {
+  display: inline-block;
+  width: 1.7rem;
+  height: 1.7rem;
+  line-height: 1.7rem;
+  margin-right: 0.5rem;
+  text-align: center;
+  border-radius: 50%;
+  background: var(--color-accent-dark);
+  color: #fff;
+  font-size: 0.95rem;
+}
+
+.help {
+  color: var(--color-muted);
+  font-size: 0.95rem;
+}
+
+.site-footer {
+  text-align: center;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  padding: 0 1rem 2rem;
+}
+
+/* 4. Buttons */
+.button {
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--color-accent);
+  border-radius: 6px;
+  background: var(--color-surface);
+  color: var(--color-accent);
+}
+
+.button:hover {
+  background: var(--color-accent-soft);
+}
+
+.button-primary {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.button-primary:hover {
+  background: var(--color-accent-dark);
+}
+
+.button-danger {
+  background: var(--color-error);
+  border-color: var(--color-error);
+  color: #fff;
+}
+
+.button-danger:hover {
+  background: #6d1515;
+}
+
+.button-small {
+  padding: 0.25rem 0.6rem;
+  font-size: 0.85rem;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+  margin: 0.75rem 0;
+}
+
+/* 5. Import area */
+.import-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.import-option {
+  background: var(--color-accent-soft);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 0.75rem;
+}
+
+.import-option-wide {
+  grid-column: 1 / -1;
+}
+
+.import-option .button {
+  width: 100%;
+}
+
+.import-option p {
+  margin: 0.4rem 0 0;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+.panel {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  border: 2px dashed var(--color-accent);
+  border-radius: var(--radius);
+}
+
+.panel p {
+  margin: 0 0 0.5rem;
+}
+
+.paste-box {
+  min-height: 5.5rem;
+  padding: 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: #fbfcfe;
+}
+
+.paste-box:empty::before {
+  content: attr(data-placeholder);
+  color: var(--color-muted);
+}
+
+.csv-box {
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 0.5rem;
+}
+
+.choice {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  border: 2px solid var(--color-accent);
+  border-radius: var(--radius);
+  background: var(--color-accent-soft);
+}
+
+.choice p {
+  margin: 0 0 0.5rem;
+}
+
+.choice .button {
+  margin: 0.25rem 0.5rem 0 0;
+}
+
+.message {
+  margin-top: 0.75rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 6px;
+}
+
+.message-info {
+  background: var(--color-accent-soft);
+}
+
+.message-error {
+  background: var(--color-error-bg);
+  color: var(--color-error);
+}
+
+/* 6. Editor table */
+.field label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.field input {
+  width: 100%;
+  max-width: 600px;
+  font: inherit;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+}
+
+.table-wrap {
+  margin-top: 1rem;
+}
+
+.rubric-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.rubric-table th,
+.rubric-table td {
+  border: 1px solid var(--color-border);
+  padding: 4px;
+  vertical-align: top;
+}
+
+.rubric-table th {
+  background: var(--color-accent-dark);
+  color: #fff;
+  font-size: 0.85rem;
+  text-align: left;
+  padding: 0.5rem 0.4rem;
+}
+
+.rubric-table th:nth-child(1) {
+  width: 15%;
+}
+
+.rubric-table th:nth-child(2) {
+  width: 8%;
+}
+
+.rubric-table th:nth-child(7) {
+  width: 8%;
+}
+
+.rubric-table textarea,
+.rubric-table input {
+  width: 100%;
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 4px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  resize: none;
+  overflow: hidden;
+}
+
+.rubric-table textarea:focus,
+.rubric-table input:focus {
+  border-color: var(--color-accent);
+  background: var(--color-surface);
+}
+
+.points-cell input {
+  text-align: center;
+}
+
+.points-note {
+  font-size: 0.75rem;
+  text-align: center;
+  color: var(--color-muted);
+  min-height: 1em;
+}
+
+.action-cell {
+  text-align: center;
+}
+
+/* 7. Status and export */
+.total {
+  font-weight: 700;
+  margin: 0.75rem 0 0.5rem;
+}
+
+.status-ok,
+.status-warn {
+  padding: 0.6rem 0.8rem;
+  border-radius: 6px;
+}
+
+.status-ok {
+  background: var(--color-ok-bg);
+  color: var(--color-ok);
+  font-weight: 600;
+}
+
+.status-warn {
+  background: var(--color-warn-bg);
+  color: var(--color-warn);
+}
+
+.status-warn ul {
+  margin: 0.25rem 0 0;
+  padding-left: 1.25rem;
+}
+
+#csv-preview {
+  background: #10202b;
+  color: #e7f1f6;
+  padding: 0.75rem;
+  border-radius: 6px;
+  overflow: auto;
+  max-height: 320px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+.copy-ok {
+  color: var(--color-ok);
+  font-weight: 600;
+}
+
+.copy-fail {
+  color: var(--color-error);
+  font-weight: 600;
+}
+
+/* 8. Small screens: each criterion becomes a card with labels above each field */
+@media (max-width: 720px) {
+  .import-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .rubric-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .rubric-table,
+  .rubric-table tbody,
+  .rubric-table tr,
+  .rubric-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .rubric-table tr {
+    margin-bottom: 1rem;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 0.5rem;
+    background: var(--color-surface);
+  }
+
+  .rubric-table td {
+    border: 0;
+    padding: 0.35rem 0;
+  }
+
+  .rubric-table td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    margin-bottom: 0.15rem;
+  }
+
+  .rubric-table textarea,
+  .rubric-table input {
+    border-color: var(--color-border);
+    background: var(--color-surface);
+  }
+
+  .points-cell input {
+    text-align: left;
+  }
+
+  .points-note {
+    text-align: left;
+  }
+
+  .action-cell {
+    text-align: right;
+  }
+}
+
+/* 9. Print: show the title, rubric name, and table only */
+@media print {
+
+  .site-header p,
+  .skip-link,
+  .site-footer,
+  .button,
+  .button-row,
+  .help,
+  #step1-title,
+  #step3-title,
+  .choice,
+  .panel,
+  #status,
+  #total {
+    display: none !important;
+  }
+
+  .steps>li:first-child,
+  .steps>li:last-child {
+    display: none;
+  }
+
+  body {
+    background: #fff;
+  }
+
+  .steps section {
+    border: 0;
+    padding: 0;
+  }
+
+  .rubric-table textarea,
+  .rubric-table input {
+    overflow: visible;
+    border: 0;
+  }
+}

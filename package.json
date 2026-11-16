@@ -1,0 +1,10 @@
+{
+  "name": "rubric-converter",
+  "version": "1.0.0",
+  "description": "Convert a four-level rubric table into a Canvas rubric import CSV. Runs entirely in the browser.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node tests/run-tests.mjs"
+  }
+}
